@@ -18,7 +18,12 @@ const sessionExpiredEvent = new CustomEvent(SESSION_EXPIRED_EVENT);
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('jwt_token');
+    console.log('Request interceptor:', {
+      url: config.url,
+      hasToken: !!token,
+      tokenPreview: token ? `${token.substring(0, 10)}...` : 'none'
+    });
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
