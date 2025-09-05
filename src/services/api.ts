@@ -64,26 +64,33 @@ export const authApi = {
 
 export const walletApi = {
   createWallet: async (data: WalletSetup): Promise<Wallet> => {
+    console.log('Creating wallet:', { data });
     const response = await api.post(config.endpoints.wallets, data);
     return response.data;
   },
   getWallets: async (): Promise<Wallet[]> => {
+    console.log('Fetching wallets');
     const response = await api.get(config.endpoints.wallets);
+    console.log('Wallets response:', response.data);
     return response.data;
   },
   getWallet: async (id: string): Promise<Wallet> => {
+    console.log('Fetching wallet:', { id });
     const response = await api.get(`${config.endpoints.wallets}/${id}`);
     return response.data;
   },
   getTransactions: async (walletId: string, params?: TransactionQueryParams): Promise<TransactionsResponse> => {
+    console.log('Fetching transactions:', { walletId, params });
     const response = await api.get(`${config.endpoints.transactions}/${walletId}`, { params });
     return response.data;
   },
   createTransaction: async (walletId: string, data: TransactionCreate): Promise<TransactionResponse> => {
-    const response = await api.post(`${config.endpoints.wallets}/transact/${walletId}`, data);
+    console.log('Creating transaction:', { walletId, data });
+    const response = await api.post(`${config.endpoints.wallets}/${walletId}/transactions`, data);
     return response.data;
   },
   downloadTransactionsPDF: async (walletId: string): Promise<Blob> => {
+    console.log('Downloading PDF:', { walletId });
     const response = await api.get(`${config.endpoints.transactions}/${walletId}/pdf`, {
       responseType: 'blob'
     });
