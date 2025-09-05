@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: wallet-service-frontend
+    env: docker
+    buildCommand: docker build -t wallet-service-frontend .
+    startCommand: docker run -p $PORT:80 wallet-service-frontend
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://wallet-service-backend.onrender.com
+      - key: NODE_ENV
+        value: production
+    autoDeploy: true
