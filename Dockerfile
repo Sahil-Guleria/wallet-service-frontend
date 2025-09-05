@@ -8,7 +8,7 @@ RUN npm ci
 
 COPY . .
 
-ENV REACT_APP_API_URL=https://wallet-service-backend.onrender.com
+ENV REACT_APP_API_URL=https://wallet-service-backend-f1j0.onrender.com
 
 RUN npm run build
 

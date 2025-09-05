@@ -1,12 +1,19 @@
 import axios from 'axios';
 import config from '../config/api';
 
+export const AUTH_ERROR_EVENT = 'auth_error';
+export const SESSION_EXPIRED_EVENT = 'session_expired';
+
 const api = axios.create({
   baseURL: config.baseURL,
   headers: {
     'Content-Type': 'application/json'
   }
 });
+
+// Custom event for authentication errors
+const authErrorEvent = new CustomEvent(AUTH_ERROR_EVENT);
+const sessionExpiredEvent = new CustomEvent(SESSION_EXPIRED_EVENT);
 
 api.interceptors.request.use(
   (config) => {
@@ -17,6 +24,22 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      if (error.response.status === 401) {
+        // Token expired or invalid
+        window.dispatchEvent(sessionExpiredEvent);
+      } else if (error.response.status === 403) {
+        // Authentication failed
+        window.dispatchEvent(authErrorEvent);
+      }
+    }
     return Promise.reject(error);
   }
 );
