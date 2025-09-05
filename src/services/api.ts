@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config/api';
+import { Wallet, WalletSetup, TransactionCreate, TransactionResponse, TransactionsResponse, TransactionQueryParams } from '../types/wallet';
 
 export const AUTH_ERROR_EVENT = 'auth_error';
 export const SESSION_EXPIRED_EVENT = 'session_expired';
@@ -55,26 +56,39 @@ export const authApi = {
   }
 };
 
+
 export const walletApi = {
-  createWallet: async (data: { name: string; balance: number }) => {
+  createWallet: async (data: WalletSetup): Promise<Wallet> => {
     const response = await api.post(config.endpoints.wallets, data);
     return response.data;
   },
-  getWallets: async () => {
+  getWallets: async (): Promise<Wallet[]> => {
     const response = await api.get(config.endpoints.wallets);
     return response.data;
   },
-  getWallet: async (id: string) => {
+  getWallet: async (id: string): Promise<Wallet> => {
     const response = await api.get(`${config.endpoints.wallets}/${id}`);
     return response.data;
   },
-  getTransactions: async (walletId: string, params?: any) => {
+  getTransactions: async (walletId: string, params?: TransactionQueryParams): Promise<TransactionsResponse> => {
     const response = await api.get(`${config.endpoints.transactions}/${walletId}`, { params });
     return response.data;
   },
-  createTransaction: async (walletId: string, data: { amount: number; description: string }) => {
+  createTransaction: async (walletId: string, data: TransactionCreate): Promise<TransactionResponse> => {
     const response = await api.post(`${config.endpoints.wallets}/transact/${walletId}`, data);
     return response.data;
+  },
+  downloadTransactionsPDF: async (walletId: string): Promise<Blob> => {
+    const response = await api.get(`${config.endpoints.transactions}/${walletId}/pdf`, {
+      responseType: 'blob'
+    });
+    return response.data;
+  },
+  setup: async (data: WalletSetup): Promise<Wallet> => {
+    return walletApi.createWallet(data);
+  },
+  transact: async (walletId: string, data: TransactionCreate): Promise<TransactionResponse> => {
+    return walletApi.createTransaction(walletId, data);
   }
 };
 

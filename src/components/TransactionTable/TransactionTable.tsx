@@ -11,7 +11,6 @@ import {
   TableRow,
   TablePagination,
   TableSortLabel,
-  IconButton,
   Button,
   Typography,
   Chip,
@@ -81,7 +80,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({ walletId }) 
     const headers = ['Date', 'Type', 'Amount', 'Balance', 'Description'];
     const csvContent = [
       headers.join(','),
-      ...data.transactions.map(tx => [
+      ...data.transactions.map((tx: Transaction) => [
         tx.date ? new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'N/A',
         tx.type,
         tx.amount.toFixed(4),
@@ -171,7 +170,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({ walletId }) 
                 <TableCell colSpan={5} align="center">No transactions found</TableCell>
               </TableRow>
             ) : (
-              transactions.map((transaction) => (
+              transactions.map((transaction: Transaction) => (
                 <TableRow key={transaction.id}>
                   <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
                   <TableCell>

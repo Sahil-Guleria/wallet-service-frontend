@@ -1,10 +1,3 @@
-export interface Wallet {
-  id: string;
-  name: string;
-  balance: number;
-  date: string;
-}
-
 export interface WalletSetup {
   name: string;
   balance: number;
@@ -12,12 +5,11 @@ export interface WalletSetup {
 
 export interface Transaction {
   id: string;
-  walletId: string;
   amount: number;
-  balance: number;
   type: 'CREDIT' | 'DEBIT';
   description: string;
   date: string;
+  balance: number;
 }
 
 export interface TransactionCreate {
@@ -25,9 +17,24 @@ export interface TransactionCreate {
   description: string;
 }
 
-export interface TransactionResponse {
+export interface Wallet {
+  id: string;
+  name: string;
   balance: number;
-  transactionId: string;
+  userId: string;
+  created_at: string;
+  updated_at: string;
+  date: string;
+}
+
+export interface TransactionResponse {
+  transaction: Transaction;
+  balance: number;
+}
+
+export interface TransactionsResponse {
+  transactions: Transaction[];
+  total: number;
 }
 
 export interface TransactionQueryParams {
@@ -35,9 +42,4 @@ export interface TransactionQueryParams {
   limit?: number;
   sortBy?: 'date' | 'amount';
   sortOrder?: 'asc' | 'desc';
-}
-
-export interface TransactionsResponse {
-  transactions: Transaction[];
-  total: number;
 }

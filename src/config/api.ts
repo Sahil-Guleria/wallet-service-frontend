@@ -1,10 +1,13 @@
-const API_URL = 'https://wallet-service-backend-f1j0.onrender.com';
-
-export const getApiUrl = () => {
+const getApiUrl = () => {
+  // First priority: Environment variable
   if (process.env.REACT_APP_API_URL) {
     return process.env.REACT_APP_API_URL;
   }
-  return API_URL;
+
+  // Second priority: Development vs Production fallback
+  return process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3001'
+    : 'https://wallet-service-backend-f1j0.onrender.com';
 };
 
 export default {
