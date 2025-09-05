@@ -86,12 +86,12 @@ export const walletApi = {
   },
   createTransaction: async (walletId: string, data: TransactionCreate): Promise<TransactionResponse> => {
     console.log('Creating transaction:', { walletId, data });
-    const response = await api.post(`${config.endpoints.wallets}/${walletId}/transactions`, data);
+    const response = await api.post(`/wallet/transact/${walletId}`, data);
     return response.data;
   },
   downloadTransactionsPDF: async (walletId: string): Promise<Blob> => {
     console.log('Downloading PDF:', { walletId });
-    const response = await api.get(`${config.endpoints.transactions}/${walletId}/pdf`, {
+    const response = await api.get(`/wallet/transactions/${walletId}/pdf`, {
       responseType: 'blob'
     });
     return response.data;

@@ -15,7 +15,7 @@ export default {
   endpoints: {
     login: '/auth/login',
     register: '/auth/register',
-    wallets: '/wallets',
-    transactions: '/wallets/transactions'
+    wallets: '/wallet/wallets',
+    transactions: '/wallet/transactions'
   }
 };
