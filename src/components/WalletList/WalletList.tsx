@@ -21,7 +21,7 @@ export const WalletList: React.FC = () => {
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['wallets'] });
   }, [queryClient]);
-  const { data: wallets = [], isLoading, error, isSuccess } = useQuery({
+  const { data: wallets = [], isLoading, error, isSuccess } = useQuery<Wallet[]>({
     queryKey: ['wallets'],
     queryFn: async () => {
       console.log('Fetching wallets...');

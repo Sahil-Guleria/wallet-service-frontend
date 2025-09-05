@@ -24,6 +24,10 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ walletId }) =>
   const [type, setType] = useState<'CREDIT' | 'DEBIT'>('CREDIT');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<{
+    amount?: string;
+    description?: string;
+  }>({});
   const queryClient = useQueryClient();
 
   const { mutate: mutateTransaction, isPending: isLoading, error } = useMutation({
@@ -39,8 +43,25 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ walletId }) =>
       queryClient.invalidateQueries({ queryKey: ['transactions', walletId] });
     },
     onError: (error: any) => {
-      // The error message will be handled in the render method
       console.error('Transaction failed:', error);
+      
+      // Clear previous field errors
+      setFieldErrors({});
+
+      // Handle validation errors
+      if (error?.details) {
+        const newFieldErrors: Record<string, string> = {};
+        error.details.forEach((detail: { field: string; message: string }) => {
+          newFieldErrors[detail.field] = detail.message;
+        });
+        setFieldErrors(newFieldErrors);
+      } else if (error?.response?.data?.details) {
+        const newFieldErrors: Record<string, string> = {};
+        error.response.data.details.forEach((detail: { field: string; message: string }) => {
+          newFieldErrors[detail.field] = detail.message;
+        });
+        setFieldErrors(newFieldErrors);
+      }
     }
   });
 
@@ -68,8 +89,10 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ walletId }) =>
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error instanceof Error 
-              ? (error as any)?.response?.data?.message || error.message 
-              : 'An error occurred'}
+              ? error.message
+              : (error as any)?.details?.[0]?.message || 
+                (error as any)?.response?.data?.details?.[0]?.message ||
+                'An error occurred'}
           </Alert>
         )}
 
@@ -94,9 +117,14 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ walletId }) =>
             label="Amount"
             type="number"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => {
+              setAmount(e.target.value);
+              setFieldErrors(prev => ({ ...prev, amount: undefined }));
+            }}
             fullWidth
             required
+            error={!!fieldErrors.amount}
+            helperText={fieldErrors.amount}
             inputProps={{
               step: '0.0001',
               min: 0,
@@ -119,9 +147,14 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ walletId }) =>
             name="description"
             label="Description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value);
+              setFieldErrors(prev => ({ ...prev, description: undefined }));
+            }}
             fullWidth
             required
+            error={!!fieldErrors.description}
+            helperText={fieldErrors.description}
             multiline
             rows={2}
             sx={{ mb: 2 }}

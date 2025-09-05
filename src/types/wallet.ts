@@ -13,8 +13,8 @@ export interface Transaction {
 }
 
 export interface TransactionCreate {
-  amount: number;
-  description: string;
+  amount: number;  // Required, precision(4), min: -999999999.9999, max: 999999999.9999
+  description: string;  // Required, min: 1, max: 200 characters
 }
 
 export interface Wallet {
@@ -42,4 +42,13 @@ export interface TransactionQueryParams {
   limit?: number;
   sortBy?: 'date' | 'amount';
   sortOrder?: 'asc' | 'desc';
+}
+
+export interface ValidationError {
+  status: 'fail';
+  error: 'Validation Error';
+  details: Array<{
+    field: string;
+    message: string;
+  }>;
 }
