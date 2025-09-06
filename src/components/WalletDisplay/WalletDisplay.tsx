@@ -9,7 +9,8 @@ import {
   IconButton,
   Chip,
 } from '@mui/material';
-import { Refresh as RefreshIcon } from '@mui/icons-material';
+import { Refresh as RefreshIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 import { walletApi } from '../../services/api';
 
 interface WalletDisplayProps {
@@ -17,6 +18,7 @@ interface WalletDisplayProps {
 }
 
 export const WalletDisplay: React.FC<WalletDisplayProps> = ({ walletId }) => {
+  const navigate = useNavigate();
   const {
     data: wallet,
     isLoading,
@@ -58,9 +60,14 @@ export const WalletDisplay: React.FC<WalletDisplayProps> = ({ walletId }) => {
     <Card sx={{ mb: 3 }}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography variant="h6" component="div">
-            {isLoading ? <Skeleton width={150} /> : wallet?.name}
-          </Typography>
+          <Box display="flex" alignItems="center" gap={2}>
+            <IconButton onClick={() => navigate('/')} size="small">
+              <ArrowBackIcon />
+            </IconButton>
+            <Typography variant="h6" component="div">
+              {isLoading ? <Skeleton width={150} /> : wallet?.name}
+            </Typography>
+          </Box>
           <IconButton onClick={() => refetch()} size="small">
             <RefreshIcon />
           </IconButton>
@@ -75,7 +82,7 @@ export const WalletDisplay: React.FC<WalletDisplayProps> = ({ walletId }) => {
         ) : (
           <Box display="flex" alignItems="center" gap={2}>
             <Typography variant="h3" component="div" color="primary.main">
-              ${(wallet?.balance ?? 0).toFixed(4)}
+              ₹{(wallet?.balance ?? 0).toFixed(4)}
             </Typography>
             <Chip
               label={(wallet?.balance ?? 0) >= 0 ? 'Positive' : 'Negative'}

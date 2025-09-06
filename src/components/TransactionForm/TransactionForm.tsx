@@ -137,7 +137,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ walletId }) =>
                   color="textSecondary"
                   sx={{ mr: 1 }}
                 >
-                  $
+                  ₹
                 </Typography>
               ),
             }}

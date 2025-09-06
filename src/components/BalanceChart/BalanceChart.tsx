@@ -82,7 +82,7 @@ export const BalanceChart: React.FC<BalanceChartProps> = ({ walletId }) => {
         ticks: {
           callback: function(value: string | number): string {
             if (typeof value === 'number') {
-              return `$${value.toFixed(2)}`;
+              return `₹${value.toFixed(2)}`;
             }
             return value;
           },

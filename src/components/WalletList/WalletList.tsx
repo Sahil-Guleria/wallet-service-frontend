@@ -104,7 +104,7 @@ export const WalletList: React.FC = () => {
                   </Typography>
                 </Box>
                 <Typography variant="h5" color="primary" gutterBottom>
-                  ${wallet.balance.toFixed(4)}
+                  ₹{wallet.balance.toFixed(4)}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
                   Created: {new Date(wallet.date).toLocaleDateString()}

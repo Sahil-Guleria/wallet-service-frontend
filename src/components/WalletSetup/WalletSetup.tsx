@@ -102,7 +102,7 @@ export const WalletSetup: React.FC<WalletSetupProps> = ({ onSuccess }) => {
                     color="textSecondary"
                     sx={{ mr: 1 }}
                   >
-                    $
+                    ₹
                   </Typography>
                 ),
               }}

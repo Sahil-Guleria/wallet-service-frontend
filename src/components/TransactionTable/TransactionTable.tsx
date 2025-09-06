@@ -185,10 +185,10 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({ walletId }) 
                       color={transaction.type === 'CREDIT' ? 'success.main' : 'error.main'}
                     >
                       {transaction.type === 'CREDIT' ? '+' : '-'}
-                      ${Math.abs(transaction.amount).toFixed(4)}
+                      ₹{Math.abs(transaction.amount).toFixed(4)}
                     </Typography>
                   </TableCell>
-                  <TableCell>${transaction.balance.toFixed(4)}</TableCell>
+                  <TableCell>₹{transaction.balance.toFixed(4)}</TableCell>
                   <TableCell>{transaction.description}</TableCell>
                 </TableRow>
               ))
