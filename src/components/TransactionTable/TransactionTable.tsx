@@ -83,8 +83,8 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({ walletId }) 
       ...data.transactions.map((tx: Transaction) => [
         tx.date ? new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'N/A',
         tx.type,
-        tx.amount.toFixed(4),
-        tx.balance.toFixed(4),
+        `₹${tx.amount.toFixed(4)}`,
+        `₹${tx.balance.toFixed(4)}`,
         `"${tx.description.replace(/"/g, '""')}"` // Escape quotes for CSV
       ].join(','))
     ].join('\n');
