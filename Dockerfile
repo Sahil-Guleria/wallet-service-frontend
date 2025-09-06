@@ -1,27 +1,34 @@
-FROM node:18-alpine as builder
+# Build stage
+FROM node:18-slim as build
 
+# Set working directory
 WORKDIR /app
 
+# Copy package files
 COPY package*.json ./
 
-RUN npm ci
+# Install dependencies
+RUN npm install
 
+# Copy app files
 COPY . .
 
-ENV REACT_APP_API_URL=https://wallet-service-backend-f1j0.onrender.com
-
+# Build the app
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
 RUN npm run build
 
-# Production environment
+# Production stage
 FROM nginx:alpine
 
-# Copy built assets from builder stage
-COPY --from=builder /app/build /usr/share/nginx/html
+# Copy build files
+COPY --from=build /app/build /usr/share/nginx/html
 
-# Add nginx config
+# Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port
 EXPOSE 80
 
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
